@@ -1,10 +1,22 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { HomePage } from './pages/Home.tsx';
+import { FeaturePage } from './pages/Feature.tsx';
+
 import './index.css'
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/:id",
+    element: <FeaturePage />,
+  },
+]);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <RouterProvider router={router} />
 )
