@@ -1,0 +1,1 @@
+export const MAG_TYPES = ['md', 'ml', 'ms', 'mw', 'me', 'mi', 'mb', 'mlg'] as const
