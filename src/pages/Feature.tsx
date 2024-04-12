@@ -1,8 +1,15 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import mapboxgl from "mapbox-gl"
 import { IComment, IFeature } from "../interfaces"
 import { timeAgo } from "../utils"
+import { ArrowBackIcon } from "../components/icons/ArrowBackIcon"
+
+// Mapbox config
+
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
 export const FeaturePage = () => {
 
@@ -100,7 +107,10 @@ export const FeaturePage = () => {
 
   return (
     <div className="my-8">
-      <Link to="/" className="text-blue-500 hover:underline transition-colors">Back to home</Link>
+      <Link to="/" className="text-blue-500 hover:underline transition-colors inline-flex items-center gap-x-2"> 
+        <ArrowBackIcon /> 
+        Back to home
+      </Link>
       <h2 className="text-2xl font-semibold mt-4">{feature?.attributes.title}</h2>
       <div className="grid md:grid-cols-2 gap-4 my-8">
         <div ref={mapContainer} className="h-[400px] rounded-sm" />
@@ -143,6 +153,9 @@ export const FeaturePage = () => {
 
       <section className="my-8">
         <h5 className="font-semibold text-xl my-2">List of comments</h5>
+        {
+          comments.length === 0 && <p>No comments yet</p>
+        }
         <ul className="list-disc pl-8 my-4">
           {
             comments.map(comment => (

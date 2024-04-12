@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
 import { Link } from "react-router-dom";
 import { IFeature } from "../interfaces"
 
@@ -11,31 +9,17 @@ export const Feature = ({ feature }: Props) => {
 
   const { title, coordinates } = feature.attributes
 
-  const mapContainer = useRef(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const mapUrl = `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-s+FF0000(${coordinates.longitude},${coordinates.latitude})/${coordinates.longitude},${coordinates.latitude},10,0/300x200?access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`
 
-  useEffect(() => {
-    if( map.current || !mapContainer.current ) return;
-
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [coordinates.longitude, coordinates.latitude],
-      zoom: 10
-    });
-
-    map.current.scrollZoom.disable();
-
-    // Add a marker
-    new mapboxgl.Marker()
-      .setLngLat([coordinates.longitude, coordinates.latitude])
-      .addTo(map.current);
-  });
 
   return (
     <article className="rounded-md border border-gray-100 shadow-sm hover:bg-gray-100 transition-colors">
       <Link to={`/${feature.id}`} >
-        <div ref={mapContainer} className="rounded-t-md h-[400px]" />
+        <img
+          src={mapUrl}
+          alt={title}
+          className="rounded-t-md h-[200px] w-full object-cover"
+        />
         <footer className="p-4">
           <h3 className="font-semibold">{title}</h3>
         </footer>
