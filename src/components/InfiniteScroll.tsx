@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useRef, useState } from 'react';
 import { ReloadIcon } from './icons/ReloadIcon';
 
@@ -60,7 +58,7 @@ export const InfiniteScroll = ({
   };
 
 	return <>
-    {true && 
+    {isLoading && !isEndOfData && 
       <div className='w-full flex justify-center mb-12'>
         <button 
           className='border border-gray-300 bg-gray-100 rounded-md px-4 py-2 hover:bg-gray-200 transition-colors duration-300 ease-in-out flex items-center gap-x-2' 

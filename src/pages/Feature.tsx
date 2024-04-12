@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { IComment, IFeature } from "../interfaces"
-import { timeAgo } from "../utils"
+import { InfiniteScroll } from "../components/InfiniteScroll"
 import { ArrowBackIcon } from "../components/icons/ArrowBackIcon"
+import { timeAgo } from "../utils"
+import { PER_PAGE } from "../constants"
+import { IComment, IFeature } from "../interfaces"
 
 // Mapbox config
 
@@ -16,6 +18,8 @@ export const FeaturePage = () => {
   const [feature, setFeature] = useState<IFeature>()
   const [comments, setComments] = useState<IComment[]>([])
   const [commentInputValue, setCommentInputValue] = useState('')
+
+  const [page, setPage] = useState(1)
 
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -40,19 +44,6 @@ export const FeaturePage = () => {
     loadFeature()
 
   }, [id, navigate])
-
-  useEffect(() => {
-    const loadFeatureComments = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/comments?feature_id=${id}`)
-        const { data, pagination } = await response.json()
-        setComments(data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    loadFeatureComments()
-  }, [id])
 
   useEffect(() => {
     if (!feature || map.current || !mapContainer.current) return;
@@ -104,6 +95,14 @@ export const FeaturePage = () => {
       console.error(error)
     }
   }
+
+  const fetchMoreComments = async () => {
+		const response = await fetch(`${import.meta.env.VITE_API_URL}/comments?feature_id=${id}&page=${page}&per_page=${PER_PAGE}`)
+    const { data } = await response.json()
+		setComments(prev => [...prev, ...data]);
+		setPage(prev => prev + 1);
+		return data.length > 0;
+	};
 
   return (
     <div className="my-8">
@@ -165,6 +164,7 @@ export const FeaturePage = () => {
               </li>
             ))
           }
+          <InfiniteScroll fetchData={fetchMoreComments} />
         </ul>
       </section>
     </div>
