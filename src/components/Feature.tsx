@@ -32,9 +32,8 @@ export const Feature = ({ feature }: Props) => {
       .addTo(map.current);
   });
 
-
   return (
-    <article className="rounded-md border border-gray-100 shadow-sm">
+    <article className="rounded-md border border-gray-100 shadow-sm hover:bg-gray-100 transition-colors">
       <Link to={`/${feature.id}`} >
         <div ref={mapContainer} className="rounded-t-md h-[400px]" />
         <footer className="p-4">

@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import mapboxgl from "mapbox-gl"
-import { IFeature } from "../interfaces"
+import { IComment, IFeature } from "../interfaces"
+import { timeAgo } from "../utils"
 
 export const FeaturePage = () => {
 
   const [feature, setFeature] = useState<IFeature>()
+  const [comments, setComments] = useState<IComment[]>([])
   const [commentInputValue, setCommentInputValue] = useState('')
 
   const mapContainer = useRef(null);
@@ -33,6 +35,19 @@ export const FeaturePage = () => {
   }, [id, navigate])
 
   useEffect(() => {
+    const loadFeatureComments = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/comments?feature_id=${id}`)
+        const { data, pagination } = await response.json()
+        setComments(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    loadFeatureComments()
+  }, [id])
+
+  useEffect(() => {
     if (!feature || map.current || !mapContainer.current) return;
 
     map.current = new mapboxgl.Map({
@@ -46,6 +61,12 @@ export const FeaturePage = () => {
     new mapboxgl.Marker()
       .setLngLat([feature.attributes.coordinates.longitude, feature.attributes.coordinates.latitude])
       .addTo(map.current);
+
+    return () => {
+      if (map.current) {
+        map.current.remove()
+      }
+    }
   }, [feature])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,6 +83,14 @@ export const FeaturePage = () => {
         body: JSON.stringify({ feature_id: id, body: commentInputValue })
       })
       if (response.ok) {
+        const newComment: IComment = {
+          id: Math.random(),
+          feature_id: Number(id),
+          body: commentInputValue,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+        setComments([newComment, ...comments]) // Optimistic update
         setCommentInputValue('')
       }
     } catch (error) {
@@ -71,7 +100,8 @@ export const FeaturePage = () => {
 
   return (
     <div className="my-8">
-      <h2 className="text-2xl font-semibold">{feature?.attributes.title}</h2>
+      <Link to="/" className="text-blue-500 hover:underline transition-colors">Back to home</Link>
+      <h2 className="text-2xl font-semibold mt-4">{feature?.attributes.title}</h2>
       <div className="grid md:grid-cols-2 gap-4 my-8">
         <div ref={mapContainer} className="h-[400px] rounded-sm" />
         <aside>
@@ -96,7 +126,7 @@ export const FeaturePage = () => {
       </div>
 
       <section>
-        <h5 className="font-semibold my-2">Add comment</h5>
+        <h5 className="font-semibold text-xl my-2">Add comment</h5>
         <form onSubmit={handleSubmit}>
           <textarea 
             className="w-full h-24 p-2 border border-gray-300 rounded-sm" 
@@ -111,10 +141,17 @@ export const FeaturePage = () => {
         </form>
       </section>
 
-      <section className="my-4">
-        <h5 className="font-semibold my-2">List of comments</h5>
-        <ul>
-          <li></li>
+      <section className="my-8">
+        <h5 className="font-semibold text-xl my-2">List of comments</h5>
+        <ul className="list-disc pl-8 my-4">
+          {
+            comments.map(comment => (
+              <li key={comment.id} className="my-2">
+                <p>{comment.body}</p>
+                <span className="text-xs text-gray-400">{timeAgo(new Date(comment.created_at))}</span>
+              </li>
+            ))
+          }
         </ul>
       </section>
     </div>
