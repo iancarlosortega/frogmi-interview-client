@@ -45,7 +45,7 @@ export const HomePage = () => {
   
   return (
     <>
-      <header className="my-4 flex justify-between items-center">
+      <header className="my-4 flex flex-col md:flex-row justify-between md:items-center gap-y-4">
         <h2 className="font-semibold text-xl">List of Earthquakes</h2>
         <Filter />
       </header>

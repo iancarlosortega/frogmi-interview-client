@@ -28,10 +28,10 @@ export const Filter = () => {
   }
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex flex-col md:flex-row md:items-center gap-2">
       <span className="font-semibold">Filters:</span>
       <form>
-        <fieldset className="flex items-center gap-x-2">
+        <fieldset className="flex flex-wrap items-center gap-2">
           {
             MAG_TYPES.map((magType) => (
               <label key={magType} className="flex items-center gap-x-1 border-r pr-2 border-r-gray-300">

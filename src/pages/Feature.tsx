@@ -112,7 +112,7 @@ export const FeaturePage = () => {
       </Link>
       <h2 className="text-2xl font-semibold mt-4">{feature?.attributes.title}</h2>
       <div className="grid md:grid-cols-2 gap-4 my-8">
-        <div ref={mapContainer} className="h-[400px] rounded-sm" />
+        <div ref={mapContainer} className="h-[400px] w-full rounded-sm" />
         <aside>
           <h3 className="font-semibold text-lg mb-2">Information</h3>
           <p><span className="font-semibold">Place:</span> {feature?.attributes.place}</p>
@@ -124,7 +124,7 @@ export const FeaturePage = () => {
           <p className="my-4">For more information, click the following link:
             <br />
             <a 
-              className="text-blue-500 hover:underline"
+              className="text-blue-500 break-all hover:underline"
               href={feature?.links.external_url} 
               target="_blank" 
               rel="noreferrer">
