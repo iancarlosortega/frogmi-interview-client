@@ -5,3 +5,25 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+
+@supports (animation-timeline: scroll()) {
+  .feature-animated {
+    view-timeline-name: --feature;
+    view-timeline-axis: block;
+  
+    animation-timeline: --feature;
+    animation-name: show;
+  
+    animation-range: entry 25% cover 30%;
+    animation-fill-mode: both;
+  }
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

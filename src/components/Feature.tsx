@@ -13,7 +13,7 @@ export const Feature = ({ feature }: Props) => {
 
 
   return (
-    <article className="rounded-md border border-gray-100 shadow-sm hover:bg-gray-100 transition-colors">
+    <article className="feature-animated rounded-md border border-gray-100 shadow-sm hover:bg-gray-100 transition-colors">
       <Link to={`/${feature.id}`} >
         <img
           src={mapUrl}
