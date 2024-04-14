@@ -39,4 +39,11 @@ Before you begin, make sure you have the following installed on your system:
    ```
     http://localhost:5173
     ```
+
+## Screenshots
+<img src="./screenshots/home-page.png" alt="Home Page">
+<img src="./screenshots/feature-page.png" alt="Feature Page">
+<img src="./screenshots/mobile.png" alt="Mobile Design" width="400">
+<img src="./screenshots/tablet.png" alt="Tablet Design" width="650">
+
   
